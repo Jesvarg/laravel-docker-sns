@@ -1,22 +1,25 @@
-# Usa la imagen oficial de PHP con Apache
 FROM php:8.2-apache
 
-# Habilita el módulo mod_rewrite de Apache
+# Instalar dependencias necesarias para Laravel
+RUN apt-get update && apt-get install -y \
+    libzip-dev unzip git curl libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql mysqli zip
+
+# Habilitar mod_rewrite
 RUN a2enmod rewrite
 
-# Instala extensiones de PostgreSQL (opcional si no lo usas)
-RUN apt-get update \
-    && apt-get install -y libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instala extensión MySQLi para conectar con MySQL
-RUN docker-php-ext-install mysqli
+# Copiar configuración Apache para Laravel
+COPY php/apache-laravel.conf /etc/apache2/sites-available/000-default.conf
 
-# Establece el directorio de trabajo
+# Establecer directorio de trabajo
 WORKDIR /var/www/html
 
-# Copia el contenido del directorio `html/` local al contenedor
-COPY html/ .
+# Montar el código con volumen (no necesitas copiar el código aquí)
 
-# Opcional: Establece permisos si es necesario
-# RUN chown -R www-data:www-data /var/www/html
+# Asignar permisos (estos comandos los puedes correr en el contenedor)
+# RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+
+# No copies el código porque lo montas con volumen
