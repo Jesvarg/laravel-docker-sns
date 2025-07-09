@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 
 # Habilitar mod_rewrite de Apache
 RUN a2enmod rewrite
-COPY ./apache-laravel.conf /etc/apache2/sites-available/000-default.conf
+COPY php/apache-laravel.conf /etc/apache2/sites-available/000-default.conf
 
 
 # Instalar Composer desde imagen oficial

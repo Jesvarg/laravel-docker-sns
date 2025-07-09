@@ -26,7 +26,7 @@ class FormController extends Controller
         ]);
 
         $sns->publish([
-            'TopicArn' => 'arn:aws:sns:us-east-1:039422425289:Practica-microservicios-con-Docker',
+            'TopicArn' => 'arn:aws:sns:us-east-1:039422425289:Laravel-Docker',
             'Message' => json_encode($data)
         ]);
 
